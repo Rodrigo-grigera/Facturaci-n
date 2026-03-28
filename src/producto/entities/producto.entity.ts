@@ -1,4 +1,4 @@
-import { Column, Entity, PrimaryGeneratedColumn } from "typeorm";
+import { Column, Entity, OneToMany, PrimaryGeneratedColumn } from "typeorm";
 
 @Entity('producto')
 
@@ -21,4 +21,6 @@ export class Producto {
     @Column({type:'int', default : 0})
     stock : number;
 
+    @OneToMany(() => PedidoProducto, pedipro => pedipro.producto)
+    pedidosProducto: PedidoProducto[];
 }
