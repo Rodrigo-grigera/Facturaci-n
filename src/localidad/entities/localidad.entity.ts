@@ -9,7 +9,7 @@ export class Localidad {
     @Column()
     nombre: string;
 
-    @OneToMany(()=> Cliente, cliente => cliente.localidad)
+    @OneToMany(()=> Cliente, cliente => cliente.localidad, { onDelete: 'SET NULL' })
     clientes: Cliente[];
 
 }

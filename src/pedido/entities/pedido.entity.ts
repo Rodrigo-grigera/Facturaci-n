@@ -8,7 +8,7 @@ export class Pedido {
     id_pedido: number;
 
    
-    @ManyToOne(() => Cliente, cliente => cliente.pedidos, { eager: true })
+    @ManyToOne(() => Cliente, cliente => cliente.pedidos, { eager: true , onDelete: 'SET NULL' })
     cliente: Cliente;
 
 

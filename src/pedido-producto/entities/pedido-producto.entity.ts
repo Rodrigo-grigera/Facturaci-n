@@ -11,7 +11,7 @@ export class PedidoProducto {
     @ManyToOne(() => Pedido, pedido => pedido.productos)
     pedido: Pedido;
 
-    @ManyToOne(() => Producto, { eager: true })
+    @ManyToOne(() => Producto, { eager: true , onDelete: 'RESTRICT'})
     producto: Producto;
 
     @Column('int')
