@@ -1,26 +1,61 @@
-import { Injectable } from '@nestjs/common';
-import { CreatePedidoProductoDto } from './dto/create-pedido-producto.dto';
+import { HttpStatus, Injectable, NotFoundException } from '@nestjs/common';
+import { PedidoProductoDto } from './dto/create-pedido-producto.dto';
 import { UpdatePedidoProductoDto } from './dto/update-pedido-producto.dto';
+import { InjectRepository } from '@nestjs/typeorm';
+import { responseDTO } from 'src/producto/dto/responseDTO';
+import { Repository } from 'typeorm';
 
 @Injectable()
 export class PedidoProductoService {
-  create(createPedidoProductoDto: CreatePedidoProductoDto) {
-    return 'This action adds a new pedidoProducto';
-  }
-
-  findAll() {
-    return `This action returns all pedidoProducto`;
-  }
-
-  findOne(id: number) {
-    return `This action returns a #${id} pedidoProducto`;
-  }
-
-  update(id: number, updatePedidoProductoDto: UpdatePedidoProductoDto) {
-    return `This action updates a #${id} pedidoProducto`;
-  }
-
-  remove(id: number) {
-    return `This action removes a #${id} pedidoProducto`;
-  }
+   constructor(@InjectRepository(PedidoProductoDto) private readonly pedProdRepository : Repository <PedidoProductoDto>){}
+  
+    async create(pedidProd: PedidoProductoDto) : Promise <responseDTO> {
+        const createPedPro = this.pedProdRepository.create(pedidProd);
+          const nuevoPedProd = await this.pedProdRepository.save(createPedPro);
+          return{
+                message: 'Agregado',
+                code : HttpStatus.CREATED,
+                data : nuevoPedProd
+          } ;
+    }
+  
+    async findAll() : Promise <responseDTO>{
+        const pedProd = await this.pedProdRepository.find();
+      if(!pedProd) throw new NotFoundException('No se puedo  realizar la operacion')
+  
+            return{
+                  message: 'Todos los pedido - producto',
+                  code : HttpStatus.OK,
+                  data : pedProd
+          } ;
+    }
+  
+    async findOne(id: number) : Promise <responseDTO> {
+      const pedProdOne = await this.pedProdRepository.findOneBy({productoId : id});
+      if(!pedProdOne) throw new NotFoundException('NO se encontro')
+            return{
+                  message: 'Pedido - Producto',
+                  code : HttpStatus.OK,
+                  data : pedProdOne
+          } ;
+    }
+  
+    async update(id: number, updatePedPro: UpdatePedidoProductoDto) : Promise <responseDTO> {
+      const updatePedProd = await this.pedProdRepository.update( id , updatePedPro);
+      if(!updatePedProd.affected) throw new NotFoundException('No se pudo actualizar')
+            return{
+                  message: 'Modificado con Exito',
+                  code : HttpStatus.NO_CONTENT
+                  
+          } ;
+    }
+  
+    async remove(id: number) : Promise <responseDTO> {
+      const deletePedProd = await this.pedProdRepository.delete(id);
+          if(!deletePedProd.affected) throw new NotFoundException('No se pudo eliminar')
+            return{
+                  message: 'Se elimino correctamente',
+                  code : HttpStatus.NO_CONTENT
+          } ;
+    }
 }
