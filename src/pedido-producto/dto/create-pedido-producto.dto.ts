@@ -2,7 +2,7 @@ import { IsInt, IsNumber, Min } from "class-validator";
 
 export class PedidoProductoDto {
     @IsInt()
-    productoId: number;
+    id_pediProd : number;
 
     @IsInt()
     @Min(1)

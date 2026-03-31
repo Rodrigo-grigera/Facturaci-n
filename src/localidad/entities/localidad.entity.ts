@@ -1,7 +1,7 @@
 import { Cliente } from "src/cliente/entities/cliente.entity";
 import { Column, Entity, OneToMany, PrimaryGeneratedColumn } from "typeorm";
 
-@Entity('localidad')
+@Entity('localidades')
 export class Localidad {
     @PrimaryGeneratedColumn()
     id_localidad : number;

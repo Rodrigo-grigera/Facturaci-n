@@ -4,10 +4,11 @@ import { UpdatePedidoProductoDto } from './dto/update-pedido-producto.dto';
 import { InjectRepository } from '@nestjs/typeorm';
 import { responseDTO } from 'src/producto/dto/responseDTO';
 import { Repository } from 'typeorm';
+import { PedidoProducto } from './entities/pedido-producto.entity';
 
 @Injectable()
 export class PedidoProductoService {
-   constructor(@InjectRepository(PedidoProductoDto) private readonly pedProdRepository : Repository <PedidoProductoDto>){}
+   constructor(@InjectRepository(PedidoProducto) private readonly pedProdRepository : Repository <PedidoProducto>){}
   
     async create(pedidProd: PedidoProductoDto) : Promise <responseDTO> {
         const createPedPro = this.pedProdRepository.create(pedidProd);
@@ -31,7 +32,7 @@ export class PedidoProductoService {
     }
   
     async findOne(id: number) : Promise <responseDTO> {
-      const pedProdOne = await this.pedProdRepository.findOneBy({productoId : id});
+      const pedProdOne = await this.pedProdRepository.findOneBy({id_pediProd : id});
       if(!pedProdOne) throw new NotFoundException('NO se encontro')
             return{
                   message: 'Pedido - Producto',

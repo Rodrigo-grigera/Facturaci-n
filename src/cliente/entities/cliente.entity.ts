@@ -2,7 +2,7 @@ import { Localidad } from "src/localidad/entities/localidad.entity";
 import { Pedido } from "src/pedido/entities/pedido.entity";
 import { Column, Entity, ManyToOne, OneToMany, PrimaryGeneratedColumn } from "typeorm";
 
-@Entity('cliente')
+@Entity('clientes')
 export class Cliente {
     @PrimaryGeneratedColumn()
     id_cliente : number;
@@ -13,7 +13,7 @@ export class Cliente {
     @Column({type:'varchar', length:200})
     apellido : string;
     
-    @Column({length:200, nullable: true})
+    @Column({type:'int', nullable: true})
     celular? : number;
     
     @Column({length: 250, nullable: true})

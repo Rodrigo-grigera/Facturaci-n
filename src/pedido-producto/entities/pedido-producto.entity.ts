@@ -6,7 +6,7 @@ import { Column, Entity, ManyToOne, PrimaryGeneratedColumn } from "typeorm";
 export class PedidoProducto {
 
     @PrimaryGeneratedColumn()
-    id: number;
+    id_pediProd: number;
 
     @ManyToOne(() => Pedido, pedido => pedido.productos)
     pedido: Pedido;
