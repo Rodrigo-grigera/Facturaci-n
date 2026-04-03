@@ -1,4 +1,4 @@
-import { HttpStatus, Injectable, NotFoundException } from '@nestjs/common';
+import { HttpStatus, Injectable, InternalServerErrorException, NotFoundException } from '@nestjs/common';
 import { PedidoProductoDto } from './dto/create-pedido-producto.dto';
 import { UpdatePedidoProductoDto } from './dto/update-pedido-producto.dto';
 import { InjectRepository } from '@nestjs/typeorm';
@@ -9,16 +9,6 @@ import { PedidoProducto } from './entities/pedido-producto.entity';
 @Injectable()
 export class PedidoProductoService {
    constructor(@InjectRepository(PedidoProducto) private readonly pedProdRepository : Repository <PedidoProducto>){}
-  
-    async create(pedidProd: PedidoProductoDto) : Promise <responseDTO> {
-        const createPedPro = this.pedProdRepository.create(pedidProd);
-          const nuevoPedProd = await this.pedProdRepository.save(createPedPro);
-          return{
-                message: 'Agregado',
-                code : HttpStatus.CREATED,
-                data : nuevoPedProd
-          } ;
-    }
   
     async findAll() : Promise <responseDTO>{
         const pedProd = await this.pedProdRepository.find();

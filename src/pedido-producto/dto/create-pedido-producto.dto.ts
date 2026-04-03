@@ -5,6 +5,9 @@ export class PedidoProductoDto {
     id_pediProd : number;
 
     @IsInt()
+    productoId: number;
+    
+    @IsInt()
     @Min(1)
     cantidad: number;
 

@@ -1,16 +1,11 @@
-import { Controller, Get, Post, Body, Patch, Param, Delete } from '@nestjs/common';
-import { PedidoProductoService } from './pedido-producto.service';
-import { PedidoProductoDto } from './dto/create-pedido-producto.dto';
+import { Controller, Get, Body, Patch, Param, Delete } from '@nestjs/common';
+import { PedidoProductoService } from './pedido-producto.service'
 import { UpdatePedidoProductoDto } from './dto/update-pedido-producto.dto';
 
 @Controller('pedido-producto')
 export class PedidoProductoController {
   constructor(private readonly pedidoProductoService: PedidoProductoService) {}
 
-  @Post()
-  create(@Body() createPedidoProductoDto: PedidoProductoDto) {
-    return this.pedidoProductoService.create(createPedidoProductoDto);
-  }
 
   @Get()
   findAll() {

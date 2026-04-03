@@ -1,24 +1,75 @@
-import { HttpStatus, Injectable, NotFoundException } from '@nestjs/common';
+import { BadRequestException, HttpStatus, Injectable, InternalServerErrorException, NotFoundException } from '@nestjs/common';
 import { CreatePedidoDto } from './dto/create-pedido.dto';
 import { UpdatePedidoDto } from './dto/update-pedido.dto';
 import { InjectRepository } from '@nestjs/typeorm';
 import { responseDTO } from 'src/producto/dto/responseDTO';
-import { Repository } from 'typeorm';
+import { In, Repository } from 'typeorm';
 import { Pedido } from './entities/pedido.entity';
+import { Cliente } from 'src/cliente/entities/cliente.entity';
+import { Producto } from 'src/producto/entities/producto.entity';
+import { PedidoProducto } from 'src/pedido-producto/entities/pedido-producto.entity';
 
 @Injectable()
 export class PedidoService {
-  constructor(@InjectRepository(Pedido) private readonly pedidoRepository : Repository <Pedido>){}
+  constructor(@InjectRepository(Pedido) private readonly pedidoRepository : Repository <Pedido>,
+              @InjectRepository(Cliente) private readonly clienteRepository : Repository <Cliente>,
+              @InjectRepository(Producto) private readonly productoRepository : Repository <Producto>,
+              @InjectRepository(PedidoProducto) private readonly pedProRepository : Repository <PedidoProducto>){}
 
-  async create(createPedido: CreatePedidoDto) : Promise <responseDTO> {
-    const newPedido = this.pedidoRepository.create(createPedido);
-    const resp = await this.pedidoRepository.save(newPedido);
-    if(!resp) throw new NotFoundException ('Pedido no creado')
-    return {
-          message : 'Pedido creado',
-          code : HttpStatus.CREATED,
-          data : resp
-    };
+  async create(body: CreatePedidoDto) : Promise <Pedido> {
+    try {
+      
+      const {clienteId, productos} = body;
+      //valido el cliente
+      const cliente = await this.clienteRepository.findOne({
+            where: {id_cliente : clienteId}
+      })
+        if(!cliente)  throw new NotFoundException('No se encontro el cliente');
+
+        if(!productos || productos.length === 0)  throw new BadRequestException('Se debe agregar productos')
+
+          const productosDB = await this.productoRepository.findBy({
+            id_producto : In(productos.map(p => p.productoId))
+          });
+
+        if (productosDB.length !== productos.length) throw new NotFoundException('Uno o más productos no existen');
+
+          //crear pedidoProductos
+          let total = 0;
+          const pedidoProductos: PedidoProducto[] = productos.map(p => {
+          const producto = productosDB.find(
+          prod => prod.id_producto === p.productoId);
+        
+        if (!producto) throw new NotFoundException(`Producto ${p.productoId} no encontrado`);
+
+        if (producto.stock < p.cantidad) throw new BadRequestException(`Stock insuficiente para ${producto.nombre}`);
+    
+          const subtotal = Number(producto.precio) * p.cantidad;
+          total += subtotal;
+
+            return this.pedProRepository.create({
+            producto,
+            cantidad: p.cantidad,
+            precioUnitario: producto.precio
+          });
+       });
+
+          const pedido =  this.pedidoRepository.create({
+            cliente, productos : pedidoProductos, total
+            })
+            // Descontar stock
+            for (const p of productos) { 
+                await this.productoRepository.decrement(
+                    { id_producto: p.productoId },
+                        'stock',
+                      p.cantidad
+        );
+      }
+          return await this.pedidoRepository.save(pedido); 
+
+    } catch (error) {
+        throw new InternalServerErrorException('Error al crear pedido'); 
+    }
   }
 
   async findAll() : Promise <responseDTO> {

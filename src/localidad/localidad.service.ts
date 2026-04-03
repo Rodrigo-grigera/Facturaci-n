@@ -12,14 +12,10 @@ export class LocalidadService {
 
   constructor(@InjectRepository(Localidad) private readonly localRepository : Repository <Localidad>){}
 
-  async create(createLocalida: CreateLocalidadDto) : Promise <responseDTO> {
+  async create(createLocalida: CreateLocalidadDto) : Promise <Localidad> {
       const createLocalidad = this.localRepository.create(createLocalida);
-        const nuevoLoca = await this.localRepository.save(createLocalidad);
-        return{
-              message: 'Localidad agregado',
-              code : HttpStatus.CREATED,
-              data : nuevoLoca
-        } ;
+        const nuevaLocalidad = await this.localRepository.save(createLocalidad);
+        return nuevaLocalidad;
   }
 
   async findAll() : Promise <responseDTO>{
