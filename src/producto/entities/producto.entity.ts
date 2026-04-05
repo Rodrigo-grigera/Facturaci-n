@@ -1,4 +1,4 @@
-import { PedidoProducto } from "src/pedido-producto/entities/pedido-producto.entity";
+import { PedidoProducto } from "../../pedido-producto/entities/pedido-producto.entity";
 import { Column, Entity, OneToMany, PrimaryGeneratedColumn } from "typeorm";
 
 @Entity('productos')

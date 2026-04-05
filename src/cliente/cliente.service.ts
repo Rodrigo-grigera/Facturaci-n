@@ -4,8 +4,8 @@ import { UpdateClienteDto } from './dto/update-cliente.dto';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Cliente } from './entities/cliente.entity';
 import { Repository } from 'typeorm';
-import { responseDTO } from 'src/producto/dto/responseDTO';
-import { Localidad } from 'src/localidad/entities/localidad.entity';
+import { responseDTO } from '.././producto/dto/responseDTO';
+import { Localidad } from '.././localidad/entities/localidad.entity';
 
 
 @Injectable()

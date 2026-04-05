@@ -1,6 +1,6 @@
 import { Type } from "class-transformer";
 import { IsArray, IsInt, ValidateNested } from "class-validator";
-import { PedidoProductoDto } from "src/pedido-producto/dto/create-pedido-producto.dto";
+import { PedidoProductoDto } from "../../pedido-producto/dto/create-pedido-producto.dto";
 
 export class CreatePedidoDto {
 

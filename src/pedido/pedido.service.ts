@@ -2,12 +2,12 @@ import { BadRequestException, HttpStatus, Injectable, InternalServerErrorExcepti
 import { CreatePedidoDto } from './dto/create-pedido.dto';
 import { UpdatePedidoDto } from './dto/update-pedido.dto';
 import { InjectRepository } from '@nestjs/typeorm';
-import { responseDTO } from 'src/producto/dto/responseDTO';
+import { responseDTO } from '.././producto/dto/responseDTO';
 import { In, Repository } from 'typeorm';
 import { Pedido } from './entities/pedido.entity';
-import { Cliente } from 'src/cliente/entities/cliente.entity';
-import { Producto } from 'src/producto/entities/producto.entity';
-import { PedidoProducto } from 'src/pedido-producto/entities/pedido-producto.entity';
+import { Cliente } from '.././cliente/entities/cliente.entity';
+import { Producto } from '.././producto/entities/producto.entity';
+import { PedidoProducto } from '.././pedido-producto/entities/pedido-producto.entity';
 
 @Injectable()
 export class PedidoService {

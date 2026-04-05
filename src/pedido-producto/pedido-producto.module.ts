@@ -8,5 +8,6 @@ import { PedidoProducto } from './entities/pedido-producto.entity';
   imports:[TypeOrmModule.forFeature([PedidoProducto])],
   controllers: [PedidoProductoController],
   providers: [PedidoProductoService],
+  exports:[PedidoProductoService, TypeOrmModule]
 })
 export class PedidoProductoModule {}

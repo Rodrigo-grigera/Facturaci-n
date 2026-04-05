@@ -1,8 +1,7 @@
-import { HttpStatus, Injectable, InternalServerErrorException, NotFoundException } from '@nestjs/common';
-import { PedidoProductoDto } from './dto/create-pedido-producto.dto';
+import { HttpStatus, Injectable,  NotFoundException } from '@nestjs/common';
 import { UpdatePedidoProductoDto } from './dto/update-pedido-producto.dto';
 import { InjectRepository } from '@nestjs/typeorm';
-import { responseDTO } from 'src/producto/dto/responseDTO';
+import { responseDTO } from '.././producto/dto/responseDTO';
 import { Repository } from 'typeorm';
 import { PedidoProducto } from './entities/pedido-producto.entity';
 

@@ -1,6 +1,6 @@
 {
   "compilerOptions": {
-    "strictPropertyInitialization": false,
+    "strictPropertyInitialization": false, //me surgian errores en los dtos y entidades , esto me lo saco
     "module": "nodenext",
     "moduleResolution": "nodenext",
     "resolvePackageJsonExports": true,
@@ -14,8 +14,8 @@
     "target": "ES2023",
     "sourceMap": true,
     "outDir": "./dist",
-    "baseUrl": "./",
-    "ignoreDeprecations": "6.0",
+    // "baseUrl": "./", cambiar los llamados a los import por ../ y no por src
+    // "ignoreDeprecations": "6.0", estas dos config. me tiraban errores 
     "incremental": true,
     "skipLibCheck": true,
     "strictNullChecks": true,

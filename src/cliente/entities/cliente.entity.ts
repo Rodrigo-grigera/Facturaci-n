@@ -1,5 +1,5 @@
-import { Localidad } from "src/localidad/entities/localidad.entity";
-import { Pedido } from "src/pedido/entities/pedido.entity";
+import { Localidad } from "../../localidad/entities/localidad.entity";
+import { Pedido } from "../../pedido/entities/pedido.entity";
 import { Column, Entity, ManyToOne, OneToMany, PrimaryGeneratedColumn } from "typeorm";
 
 @Entity('clientes')

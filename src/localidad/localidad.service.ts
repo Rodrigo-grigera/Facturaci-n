@@ -4,8 +4,8 @@ import { UpdateLocalidadDto } from './dto/update-localidad.dto';
 import { Localidad } from './entities/localidad.entity';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
-import { responseDTO } from 'src/producto/dto/responseDTO';
-import { UpdateClienteDto } from 'src/cliente/dto/update-cliente.dto';
+import { responseDTO } from '../producto/dto/responseDTO';
+
 
 @Injectable()
 export class LocalidadService {

@@ -1,4 +1,4 @@
-import { Cliente } from "src/cliente/entities/cliente.entity";
+import { Cliente } from "../../cliente/entities/cliente.entity";
 import { Column, Entity, OneToMany, PrimaryGeneratedColumn } from "typeorm";
 
 @Entity('localidades')
