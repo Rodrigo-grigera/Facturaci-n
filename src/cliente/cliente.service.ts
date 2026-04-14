@@ -20,7 +20,7 @@ export class ClienteService {
             //localidadId es el nombre de la variable que en dto no existe como id
             let localidad : Localidad | null = null;
 
-            if(localidadId){
+            if(localidadId !== undefined && localidadId !== null){
                   localidad = await this.localRepository.findOne({
                   where: {id_localidad: localidadId}
                   })
@@ -28,8 +28,7 @@ export class ClienteService {
                         throw new NotFoundException('localidad no encontrada');
                   }
                   
-            }
-                  
+            }     
                   const crearClien = this.clienteRepository.create({
                         ...clienteData, 
                         ...(localidad ? {localidad} : {} ) }); //Si localidad viene guarda la localidad si no viene guarda null
@@ -37,12 +36,15 @@ export class ClienteService {
                   return nuevoClie;
 
       } catch (error) {
-            throw new InternalServerErrorException('Error al crear cliente');
+            console.log(error)
+            throw error;
       }
   }
 
   async findAll() : Promise <responseDTO>{
-      const clientes = await this.clienteRepository.find();
+      const clientes = await this.clienteRepository.find({
+            relations: ['localidad']
+      });
     if(!clientes) throw new NotFoundException('No se encontraron los clientes')
 
           return{
@@ -51,23 +53,67 @@ export class ClienteService {
                 data : clientes
         } ;
   }
+  async findPorLocalidad(id: number): Promise <responseDTO>{
+
+      const localidad = await this.localRepository.findOne({
+            where:{id_localidad : id},
+      })
+      if(!localidad) throw new NotFoundException('No existe localidad')
+            
+      const clientes = await this.clienteRepository.find({
+            where: {
+                  localidad: {id_localidad : id}
+            },
+            relations: ['localidad']
+      })
+
+      return {
+            message: 'Todos los clientes con misma localidad',
+            code: HttpStatus.OK,
+            data: clientes
+
+      }
+  }
 
   async findOne(id: number) : Promise <responseDTO> {
-    const cliente = await this.clienteRepository.findOneBy({id_cliente : id});
+    const cliente = await this.clienteRepository.findOne({
+      where: {id_cliente : id},
+      relations : ['localidad']
+    })
     if(!cliente) throw new NotFoundException('Cliente NO encontrado')
           return{
-                message: 'Todos los clientes',
+                message: 'Cliente encontrado',
                 code : HttpStatus.OK,
                 data : cliente
         } ;
   }
 
   async update(id: number, updateCliente: UpdateClienteDto) : Promise <responseDTO> {
-    const updateClien = await this.clienteRepository.update({id_cliente : id} , updateCliente);
-    if(!updateClien.affected) throw new NotFoundException('No se pudo actualizar el cliente')
+      const cliente = await this.clienteRepository.findOne({
+            where : {id_cliente : id},
+            relations : ['localidad']
+      })
+
+      if(!cliente) throw new NotFoundException('Cliente no encontrado')
+
+            if(updateCliente.nombre) cliente.nombre = updateCliente.nombre
+            if(updateCliente.apellido) cliente.apellido = updateCliente.apellido
+            if(updateCliente.celular) cliente.celular = updateCliente.celular
+            if(updateCliente.direccion) cliente.direccion = updateCliente.direccion
+            if(updateCliente.localidadId){
+                  const localidad = await this.localRepository.findOne({
+                        where: {id_localidad : updateCliente.localidadId}
+                  });
+
+                  if(!localidad) throw new NotFoundException('Localidad no encontrada')
+                  cliente.localidad = localidad;
+            }
+                 
+            await this.clienteRepository.save(cliente);
+
           return{
                 message: 'Cliente modificado',
-                code : HttpStatus.NO_CONTENT
+                code : HttpStatus.OK
                 
         } ;
   }

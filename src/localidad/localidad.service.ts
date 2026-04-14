@@ -12,8 +12,8 @@ export class LocalidadService {
 
   constructor(@InjectRepository(Localidad) private readonly localRepository : Repository <Localidad>){}
 
-  async create(createLocalida: CreateLocalidadDto) : Promise <Localidad> {
-      const createLocalidad = this.localRepository.create(createLocalida);
+  async create(create: CreateLocalidadDto) : Promise <Localidad> {
+      const createLocalidad = this.localRepository.create(create);
         const nuevaLocalidad = await this.localRepository.save(createLocalidad);
         return nuevaLocalidad;
   }
@@ -23,7 +23,7 @@ export class LocalidadService {
     if(!localidades) throw new NotFoundException('No se encontraron localidades')
 
           return{
-                message: 'Todos los clientes',
+                message: 'Todos las localidades',
                 code : HttpStatus.OK,
                 data : localidades
         } ;

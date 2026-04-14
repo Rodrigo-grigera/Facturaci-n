@@ -22,6 +22,11 @@ export class ClienteController {
     return this.clienteService.findOne(+id);
   }
 
+  @Get('localidad/:id')
+  findLocalId(@Param('id') id: string){
+    return this.clienteService.findPorLocalidad(Number(id))
+  }
+
   @Patch(':id')
   update(@Param('id') id: string, @Body() updateClienteDto: UpdateClienteDto) {
     return this.clienteService.update(+id, updateClienteDto);

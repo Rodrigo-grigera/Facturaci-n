@@ -11,17 +11,18 @@ export class CreateClienteDto {
         @MaxLength(200)
         apellido : string;
         
-        @IsNumber()
+        @IsString()
         @MaxLength(20)
         @IsOptional()
-        celular? : number;
+        celular? : string;
         
         @IsString()
         @IsOptional()
         @MaxLength(250)
         direccion? : string;
-     
-       @IsOptional()
+        
+        @IsNumber()
+        @IsOptional()
         localidadId?: number;
         
 }

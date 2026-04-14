@@ -13,13 +13,13 @@ export class Cliente {
     @Column({type:'varchar', length:200})
     apellido : string;
     
-    @Column({type:'int', nullable: true})
-    celular? : number;
+    @Column({ type: 'varchar', length: 20, nullable: true })
+    celular? : string;
     
     @Column({length: 250, nullable: true})
     direccion? : string;
 
-    @ManyToOne(() => Localidad, localidad => localidad.clientes, { eager: true, nullable: true })
+    @ManyToOne(() => Localidad, localidad => localidad.clientes, {nullable: true, onDelete: 'SET NULL' })
     localidad?: Localidad;
 
     @OneToMany(()=> Pedido, pedido => pedido.cliente)
