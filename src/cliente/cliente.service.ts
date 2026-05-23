@@ -1,4 +1,4 @@
-import { HttpStatus, Injectable, InternalServerErrorException, NotFoundException } from '@nestjs/common';
+import { HttpStatus, Injectable, NotFoundException } from '@nestjs/common';
 import { CreateClienteDto } from './dto/create-cliente.dto';
 import { UpdateClienteDto } from './dto/update-cliente.dto';
 import { InjectRepository } from '@nestjs/typeorm';
@@ -25,7 +25,7 @@ export class ClienteService {
                   where: {id_localidad: localidadId}
                   })
                   if(!localidad){
-                        throw new NotFoundException('localidad no encontrada');
+                        throw new NotFoundException('Localidad no encontrada');
                   }
                   
             }     
