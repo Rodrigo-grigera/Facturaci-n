@@ -2,7 +2,7 @@ import { BadRequestException, HttpStatus, Injectable, InternalServerErrorExcepti
 import { CreatePedidoDto } from './dto/create-pedido.dto';
 import { UpdatePedidoDto } from './dto/update-pedido.dto';
 import { InjectRepository } from '@nestjs/typeorm';
-import { responseDTO } from '.././producto/dto/responseDTO';
+import { responseDTO } from '../responseDTO';
 import { In, Repository } from 'typeorm';
 import { Pedido } from './entities/pedido.entity';
 import { Cliente } from '.././cliente/entities/cliente.entity';
@@ -72,7 +72,7 @@ export class PedidoService {
     }
   }
 
-  async findAll() : Promise <responseDTO> {
+  async findAll() : Promise <responseDTO<Pedido>> {
     const pedidos = await this.pedidoRepository.find()
     if(!pedidos) throw new NotFoundException('No se encontraron pedidos');
     return {
@@ -82,7 +82,7 @@ export class PedidoService {
     };
   }
 
-  async findOne(id: number) : Promise <responseDTO> {
+  async findOne(id: number) : Promise <responseDTO<Pedido>> {
     const resp = await this.pedidoRepository.findOneBy({id_pedido : id});
     if(!resp) throw new NotFoundException ('No se encontro pedido')
     return{
@@ -92,7 +92,7 @@ export class PedidoService {
     } ;
   }
 
-  async update(id: number, updatePedidoDto: UpdatePedidoDto) : Promise <responseDTO> {
+  async update(id: number, updatePedidoDto: UpdatePedidoDto) : Promise <responseDTO<Pedido>> {
     const updatePedido = await this.pedidoRepository.update({id_pedido : id}, updatePedidoDto);
     if(!updatePedido.affected) throw new NotFoundException('Error al modificar el pedido');
     return {
@@ -101,7 +101,7 @@ export class PedidoService {
     };
   }
 
-  async remove(id: number) : Promise <responseDTO> {
+  async remove(id: number) : Promise <responseDTO<Pedido>> {
     const deletePedido = await this.pedidoRepository.delete({id_pedido : id});
     if(!deletePedido.affected) throw new NotFoundException('Error al eliminar pedido')
     return {

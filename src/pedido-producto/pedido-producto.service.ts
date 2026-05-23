@@ -1,7 +1,7 @@
 import { HttpStatus, Injectable,  NotFoundException } from '@nestjs/common';
 import { UpdatePedidoProductoDto } from './dto/update-pedido-producto.dto';
 import { InjectRepository } from '@nestjs/typeorm';
-import { responseDTO } from '.././producto/dto/responseDTO';
+import { responseDTO } from '../responseDTO';
 import { Repository } from 'typeorm';
 import { PedidoProducto } from './entities/pedido-producto.entity';
 
@@ -9,7 +9,7 @@ import { PedidoProducto } from './entities/pedido-producto.entity';
 export class PedidoProductoService {
    constructor(@InjectRepository(PedidoProducto) private readonly pedProdRepository : Repository <PedidoProducto>){}
   
-    async findAll() : Promise <responseDTO>{
+    async findAll() : Promise <responseDTO<PedidoProducto>>{
         const pedProd = await this.pedProdRepository.find();
       if(!pedProd) throw new NotFoundException('No se puedo  realizar la operacion')
   
@@ -20,7 +20,7 @@ export class PedidoProductoService {
           } ;
     }
   
-    async findOne(id: number) : Promise <responseDTO> {
+    async findOne(id: number) : Promise <responseDTO<PedidoProducto>> {
       const pedProdOne = await this.pedProdRepository.findOneBy({id_pediProd : id});
       if(!pedProdOne) throw new NotFoundException('NO se encontro')
             return{
@@ -30,7 +30,7 @@ export class PedidoProductoService {
           } ;
     }
   
-    async update(id: number, updatePedPro: UpdatePedidoProductoDto) : Promise <responseDTO> {
+    async update(id: number, updatePedPro: UpdatePedidoProductoDto) : Promise <responseDTO<PedidoProducto>> {
       const updatePedProd = await this.pedProdRepository.update( id , updatePedPro);
       if(!updatePedProd.affected) throw new NotFoundException('No se pudo actualizar')
             return{
@@ -40,7 +40,7 @@ export class PedidoProductoService {
           } ;
     }
   
-    async remove(id: number) : Promise <responseDTO> {
+    async remove(id: number) : Promise <responseDTO<PedidoProducto>> {
       const deletePedProd = await this.pedProdRepository.delete(id);
           if(!deletePedProd.affected) throw new NotFoundException('No se pudo eliminar')
             return{

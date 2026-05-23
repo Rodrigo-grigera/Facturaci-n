@@ -4,7 +4,7 @@ import { UpdateClienteDto } from './dto/update-cliente.dto';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Cliente } from './entities/cliente.entity';
 import { Repository } from 'typeorm';
-import { responseDTO } from '.././producto/dto/responseDTO';
+import { responseDTO } from '../responseDTO';
 import { Localidad } from '.././localidad/entities/localidad.entity';
 
 
@@ -41,7 +41,7 @@ export class ClienteService {
       }
   }
 
-  async findAll() : Promise <responseDTO>{
+  async findAll() : Promise <responseDTO<Cliente>>{
       const clientes = await this.clienteRepository.find({
             relations: ['localidad']
       });
@@ -53,7 +53,7 @@ export class ClienteService {
                 data : clientes
         } ;
   }
-  async findPorLocalidad(id: number): Promise <responseDTO>{
+  async findPorLocalidad(id: number): Promise <responseDTO<Cliente>>{
 
       const localidad = await this.localRepository.findOne({
             where:{id_localidad : id},
@@ -75,7 +75,7 @@ export class ClienteService {
       }
   }
 
-  async findOne(id: number) : Promise <responseDTO> {
+  async findOne(id: number) : Promise <responseDTO<Cliente>> {
     const cliente = await this.clienteRepository.findOne({
       where: {id_cliente : id},
       relations : ['localidad']
@@ -88,7 +88,7 @@ export class ClienteService {
         } ;
   }
 
-  async update(id: number, updateCliente: UpdateClienteDto) : Promise <responseDTO> {
+  async update(id: number, updateCliente: UpdateClienteDto) : Promise <responseDTO<Cliente>> {
       const cliente = await this.clienteRepository.findOne({
             where : {id_cliente : id},
             relations : ['localidad']
@@ -118,7 +118,7 @@ export class ClienteService {
         } ;
   }
 
-  async remove(id: number) : Promise <responseDTO> {
+  async remove(id: number) : Promise <responseDTO<Cliente>> {
     const deleteClie = await this.clienteRepository.delete({id_cliente : id});
         if(!deleteClie.affected) throw new NotFoundException('No se pudo eliminar el cliente')
           return{

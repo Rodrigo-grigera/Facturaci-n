@@ -4,7 +4,7 @@ import { UpdateLocalidadDto } from './dto/update-localidad.dto';
 import { Localidad } from './entities/localidad.entity';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
-import { responseDTO } from '../producto/dto/responseDTO';
+import { responseDTO } from '../responseDTO';
 
 
 @Injectable()
@@ -18,7 +18,7 @@ export class LocalidadService {
         return nuevaLocalidad;
   }
 
-  async findAll() : Promise <responseDTO>{
+  async findAll() : Promise <responseDTO<Localidad>>{
       const localidades = await this.localRepository.find();
     if(!localidades) throw new NotFoundException('No se encontraron localidades')
 
@@ -29,7 +29,7 @@ export class LocalidadService {
         } ;
   }
 
-  async findOne(id: number) : Promise <responseDTO> {
+  async findOne(id: number) : Promise <responseDTO<Localidad>> {
     const localidad = await this.localRepository.findOneBy({id_localidad : id});
     if(!localidad) throw new NotFoundException('NO se encontro localidad')
           return{
@@ -39,7 +39,7 @@ export class LocalidadService {
         } ;
   }
 
-  async update(id: number, updateLocalidad: UpdateLocalidadDto) : Promise <responseDTO> {
+  async update(id: number, updateLocalidad: UpdateLocalidadDto) : Promise <responseDTO<Localidad>> {
     const updateLoca = await this.localRepository.update({id_localidad : id} , updateLocalidad);
     if(!updateLoca.affected) throw new NotFoundException('No se pudo actualizar La localidad')
           return{
@@ -49,7 +49,7 @@ export class LocalidadService {
         } ;
   }
 
-  async remove(id: number) : Promise <responseDTO> {
+  async remove(id: number) : Promise <responseDTO<Localidad>> {
     const deleteLoca = await this.localRepository.delete({id_localidad: id});
         if(!deleteLoca.affected) throw new NotFoundException('No se pudo eliminar la localidad')
           return{

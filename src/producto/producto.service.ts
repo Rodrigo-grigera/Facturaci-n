@@ -4,7 +4,7 @@ import { UpdateProductoDto } from './dto/update-producto.dto';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Producto } from './entities/producto.entity';
 import { Repository } from 'typeorm';
-import { responseDTO } from './dto/responseDTO';
+import { responseDTO } from '../responseDTO';
 
 @Injectable()
 export class ProductoService {
@@ -23,7 +23,7 @@ export class ProductoService {
     }
   }
 
-  async findAll(): Promise <responseDTO> {
+  async findAll(): Promise <responseDTO<Producto>> {
     const resp = await this.productoRepository.find();
     if(!resp) throw new NotFoundException('No se encontraron los productos');
     return {
@@ -33,7 +33,7 @@ export class ProductoService {
     };
   }
 
-  async findOne(id: number) : Promise <responseDTO> {
+  async findOne(id: number) : Promise <responseDTO<Producto>> {
     const resp = await this.productoRepository.findOneBy({id_producto : id});
     if(!resp) throw new NotFoundException('No se encontro producto');
     return {
@@ -43,7 +43,7 @@ export class ProductoService {
     };
   }
 
-  async update(id: number, updateProducto: UpdateProductoDto) : Promise <responseDTO> {
+  async update(id: number, updateProducto: UpdateProductoDto) : Promise <responseDTO<Producto>> {
     const modificarPro = await this.productoRepository.update(id, updateProducto);
     if(!modificarPro.affected) throw new NotFoundException('Error al modificar el producto')
     return{
@@ -52,7 +52,7 @@ export class ProductoService {
     };
   }
 
-  async remove(id: number) : Promise <responseDTO>{
+  async remove(id: number) : Promise <responseDTO<Producto>>{
     const eliminar = await this.productoRepository.delete(id);
     if(!eliminar.affected) throw new NotFoundException('No se pudo eliminar el producto')
     return {
